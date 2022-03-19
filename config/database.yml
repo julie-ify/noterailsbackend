@@ -82,6 +82,4 @@ test:
 #
 production:
   <<: *default
-  database: noterailsbackend_production
-  username: noterailsbackend
-  password: <%= ENV['NOTERAILSBACKEND_DATABASE_PASSWORD'] %>
+  url: <%= ENV['MY_APP_DATABASE_URL'] %>
