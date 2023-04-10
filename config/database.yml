@@ -17,7 +17,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  username: postgres
+  username: labber
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
@@ -82,6 +82,4 @@ test:
 #
 production:
   <<: *default
-  database: noterailsbackend_production
-  username: noterailsbackend
-  password: <%= ENV['NOTERAILSBACKEND_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
