@@ -11,11 +11,6 @@
 - Use API endpoints to get data
 - Fetch data from the API
 
-## Deployment
-
-- Click [here](https://julienotesbackend.herokuapp.com/) to view the documentation of the Lunar Hotel API.
-
-
 ## Built With
 
 - Ruby on Rails

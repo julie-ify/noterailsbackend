@@ -21,7 +21,7 @@ RSpec.configure do |config|
         title: 'API V1',
         version: 'v1'
       },
-			components: {
+      components: {
         securitySchemes: {
           bearer_auth: {
             type: :http,
@@ -33,10 +33,10 @@ RSpec.configure do |config|
       paths: {},
       servers: [
         {
-          url: 'https://{defaultHost}',
+          url: 'http://{defaultHost}',
           variables: {
             defaultHost: {
-              default: 'julienotesbackend.herokuapp.com'
+              default: 'localhost:3000/'
             }
           }
         }

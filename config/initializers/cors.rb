@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Be sure to restart your server when you modify this file.
 
 # Avoid CORS issues when API is called from the frontend app.
@@ -9,9 +11,9 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins 'https://julianas-notetaking.netlify.app', 'http://localhost:3001', 'http://127.0.0.1:3001'
     resource '*',
-      headers: %w(Authorization),
-			expose: %w(Authorization),
-      methods: :any,
-			max_age: 600
+             headers: %w[Authorization],
+             expose: %w[Authorization],
+             methods: :any,
+             max_age: 600
   end
 end

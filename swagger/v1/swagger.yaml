@@ -116,6 +116,22 @@ paths:
           description: successfully authenticated
         '401':
           description: authentication failed
+  "/all-notes":
+    get:
+      summary: admin can see all the users notes
+      tags:
+      - Notes
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+        '201':
+          description: successfully authenticated
+        '401':
+          description: authentication failed
+        '403':
+          description: access denied
   "/users":
     post:
       summary: create user
@@ -180,7 +196,7 @@ paths:
         '200':
           description: successful
 servers:
-- url: https://{defaultHost}
+- url: http://{defaultHost}
   variables:
     defaultHost:
-      default: julienotesbackend.herokuapp.com
+      default: localhost:3000/

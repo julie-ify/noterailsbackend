@@ -1,11 +1,11 @@
- require 'swagger_helper'
+# frozen_string_literal: true
+
+require 'swagger_helper'
 
 RSpec.describe 'users', type: :request do
-
   path '/users' do
-
     post('create user') do
-			tags 'User Registration'
+      tags 'User Registration'
       consumes 'application/json'
       parameter name: :user, in: :body, schema: {
         type: :object,
@@ -31,9 +31,8 @@ RSpec.describe 'users', type: :request do
   end
 
   path '/login' do
-
     post('login user') do
-			tags 'Login'
+      tags 'Login'
       consumes 'application/json'
       parameter name: :login, in: :body, schema: {
         type: :object,
@@ -56,9 +55,8 @@ RSpec.describe 'users', type: :request do
   end
 
   path '/auto_login' do
-
     get('auto_login user') do
-			tags 'Auto Login'
+      tags 'Auto Login'
       security [bearer_auth: []]
       response(200, 'successful') do
         response '201', 'authentication successful' do
