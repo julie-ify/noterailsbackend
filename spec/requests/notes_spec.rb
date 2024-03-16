@@ -1,14 +1,13 @@
+# frozen_string_literal: true
+
 require 'swagger_helper'
 
 RSpec.describe 'notes', type: :request do
-
   path '/notes' do
-
     get('list notes') do
-			tags 'Notes'
+      tags 'Notes'
       security [bearer_auth: []]
       response(200, 'successful') do
-
         after do |example|
           example.metadata[:response][:content] = {
             'application/json' => {
@@ -19,7 +18,7 @@ RSpec.describe 'notes', type: :request do
         run_test!
       end
 
-			response '201', 'successfully authenticated' do
+      response '201', 'successfully authenticated' do
         let(:Authorization) { "Bearer #{::Base64.strict_encode64('testuser:2435647')}" }
         run_test!
       end
@@ -31,19 +30,19 @@ RSpec.describe 'notes', type: :request do
     end
 
     post('create note') do
-			tags 'Notes'
-			security [bearer_auth: []]
-			consumes 'application/json'        
-			parameter name: :note, in: :body, schema: {          
-			type: :object,          
-			properties: {            
-				title: { type: :string },            
-				body: { type: :string }          
-			},          
-			required: %w[title body]  
-			}
+      tags 'Notes'
+      security [bearer_auth: []]
+      consumes 'application/json'
+      parameter name: :note, in: :body, schema: {
+        type: :object,
+        properties: {
+          title: { type: :string },
+          body: { type: :string }
+        },
+        required: %w[title body]
+      }
 
-			response '201', 'note created' do
+      response '201', 'note created' do
         let(:note) do
           { title: 'Note1', body: 'This is note 1' }
         end
@@ -51,7 +50,7 @@ RSpec.describe 'notes', type: :request do
       end
 
       response '422', 'invalid request' do
-        let(:note) { { title: 'Note1'} }
+        let(:note) { { title: 'Note1' } }
         run_test!
       end
 
@@ -79,11 +78,10 @@ RSpec.describe 'notes', type: :request do
   end
 
   path '/notes/{id}' do
-    # You'll want to customize the parameter types...
     parameter name: 'id', in: :path, type: :string, description: 'id'
 
     get('show note') do
-			tags 'Notes'
+      tags 'Notes'
       security [bearer_auth: []]
       response(200, 'successful') do
         let(:id) { '123' }
@@ -98,7 +96,7 @@ RSpec.describe 'notes', type: :request do
         run_test!
       end
 
-			response '201', 'successfully authenticated' do
+      response '201', 'successfully authenticated' do
         let(:Authorization) { "Bearer #{::Base64.strict_encode64('testuser:2435647')}" }
         run_test!
       end
@@ -110,22 +108,20 @@ RSpec.describe 'notes', type: :request do
     end
 
     put('update note') do
-			tags 'Notes'
+      tags 'Notes'
       security [bearer_auth: []]
-			consumes 'application/json'        
-			parameter name: :note, in: :body, schema: {          
-			type: :object,          
-			properties: {            
-				title: { type: :string },            
-				body: { type: :string }          
-			},          
-			required: %w[title body]  
-			}
-			let(:id) { '123' }
+      consumes 'application/json'
+      parameter name: :note, in: :body, schema: {
+        type: :object,
+        properties: {
+          title: { type: :string },
+          body: { type: :string }
+        },
+        required: %w[title body]
+      }
+      let(:id) { '123' }
 
-			
-
-			response '201', 'note updated' do
+      response '201', 'note updated' do
         let(:note) do
           { title: 'Note1', body: 'This is note 1.1' }
         end
@@ -133,7 +129,7 @@ RSpec.describe 'notes', type: :request do
       end
 
       response '422', 'invalid request' do
-        let(:note) { { title: 'note1'} }
+        let(:note) { { title: 'note1' } }
         run_test!
       end
 
@@ -149,18 +145,18 @@ RSpec.describe 'notes', type: :request do
 
       response '200', 'successful' do
         after do |example|
-					example.metadata[:response][:content] = {
-						'application/json' => {
-							example: JSON.parse(response.body, symbolize_names: true)
-						}
-					}
-				end
-				run_test!
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
       end
     end
 
     delete('delete note') do
-			tags 'Notes'
+      tags 'Notes'
       security [bearer_auth: []]
       response(200, 'successful') do
         let(:id) { '123' }
@@ -175,13 +171,45 @@ RSpec.describe 'notes', type: :request do
         run_test!
       end
 
-			response '201', 'successfully authenticated' do
+      response '201', 'successfully authenticated' do
         let(:Authorization) { "Bearer #{::Base64.strict_encode64('testuser:2435647')}" }
         run_test!
       end
 
       response '401', 'authentication failed' do
         let(:Authorization) { "Bearer #{::Base64.strict_encode64('bogus:bogus')}" }
+        run_test!
+      end
+    end
+  end
+
+  path '/all-notes' do
+    get('admin can see all the users notes') do
+      tags 'Notes'
+      security [bearer_auth: []]
+      response(200, 'successful') do
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+
+      response '201', 'successfully authenticated' do
+        let(:Authorization) { "Bearer #{::Base64.strict_encode64('testuser:2435647')}" }
+        run_test!
+      end
+
+      response '401', 'authentication failed' do
+        let(:Authorization) { "Bearer #{::Base64.strict_encode64('bogus:bogus')}" }
+        run_test!
+      end
+
+      response '403', 'access denied' do
+        let(:Authorization) { "Bearer #{::Base64.strict_encode64('testuser:2435647')}" }
         run_test!
       end
     end

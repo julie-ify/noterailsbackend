@@ -1,10 +1,13 @@
+# frozen_string_literal: true
+
 class NotesController < ApplicationController
-  before_action :set_note, only: [:show, :update, :destroy]
+  before_action :set_note, only: %i[show update destroy]
   before_action :authorized
+  load_and_authorize_resource
 
   # GET /notes
   def index
-    @notes = Note.where user: @user.id
+    @notes = Note.where user: @current_user.id
 
     render json: @notes
   end
@@ -17,7 +20,7 @@ class NotesController < ApplicationController
   # POST /notes
   def create
     @note = Note.new(note_params)
-    @note.user = @user
+    @note.user = @current_user
 
     if @note.save
       render json: @note, status: :created, location: @note
@@ -40,14 +43,22 @@ class NotesController < ApplicationController
     @note.destroy
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_note
-      @note = Note.find(params[:id])
-    end
+  # GET /all-notes
+  # get all the notes for admin use
+  def get_all_notes
+    @notes = Note.all
+    render json: { notes: @notes }
+  end
 
-    # Only allow a list of trusted parameters through.
-    def note_params
-      params.require(:note).permit(:title, :body, :user_id)
-    end
+  private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_note
+    @note = Note.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def note_params
+    params.require(:note).permit(:title, :body, :user_id)
+  end
 end
